@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class BudgetCalculateRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'weeks' => ['required', 'integer', 'min:1'],
+            'hours_per_week' => ['required', 'integer', 'min:1'],
+            'hourly_rate' => ['required', 'numeric', 'min:0.01'],
+            'contingency_percent' => ['required', 'numeric', 'between:10,25'],
+            'fixed_costs' => ['nullable', 'array'],
+            'fixed_costs.infrastructure' => ['nullable', 'numeric', 'min:0'],
+            'fixed_costs.integrations' => ['nullable', 'numeric', 'min:0'],
+            'fixed_costs.platform' => ['nullable', 'numeric', 'min:0'],
+            'breakdown' => ['required', 'array'],
+            'breakdown.analysis' => ['required', 'numeric', 'between:10,15'],
+            'breakdown.ux_ui' => ['required', 'numeric', 'between:10,15'],
+            'breakdown.complexity' => ['required', 'numeric', 'between:20,30'],
+            'breakdown.development' => ['required', 'numeric', 'between:40,50'],
+            'breakdown.qa_testing' => ['required', 'numeric', 'between:15,20'],
+            'breakdown.project_management' => ['required', 'numeric', 'between:10,15'],
+            'breakdown.devops' => ['required', 'numeric', 'between:5,5'],
+        ];
+    }
+}
