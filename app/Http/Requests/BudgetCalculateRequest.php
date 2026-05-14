@@ -23,13 +23,13 @@ class BudgetCalculateRequest extends FormRequest
             'fixed_costs.integrations' => ['nullable', 'numeric', 'min:0'],
             'fixed_costs.platform' => ['nullable', 'numeric', 'min:0'],
             'breakdown' => ['required', 'array'],
-            'breakdown.analysis' => ['required', 'numeric', 'between:10,15'],
-            'breakdown.ux_ui' => ['required', 'numeric', 'between:10,15'],
-            'breakdown.complexity' => ['required', 'numeric', 'between:20,30'],
-            'breakdown.development' => ['required', 'numeric', 'between:40,50'],
-            'breakdown.qa_testing' => ['required', 'numeric', 'between:15,20'],
-            'breakdown.project_management' => ['required', 'numeric', 'between:10,15'],
-            'breakdown.devops' => ['required', 'numeric', 'between:5,5'],
+            'breakdown.analysis' => ['required', 'numeric', 'between:0,100'],
+            'breakdown.ux_ui' => ['required', 'numeric', 'between:0,100'],
+            'breakdown.complexity' => ['required', 'numeric', 'between:0,100'],
+            'breakdown.development' => ['required', 'numeric', 'between:0,100'],
+            'breakdown.qa_testing' => ['required', 'numeric', 'between:0,100'],
+            'breakdown.project_management' => ['required', 'numeric', 'between:0,100'],
+            'breakdown.devops' => ['required', 'numeric', 'between:0,100'],
         ];
     }
 }

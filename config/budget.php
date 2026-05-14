@@ -2,13 +2,13 @@
 
 return [
     'rubrics' => [
-        'analysis' => ['min' => 10, 'max' => 15],
-        'ux_ui' => ['min' => 10, 'max' => 15],
-        'complexity' => ['min' => 20, 'max' => 30],
-        'development' => ['min' => 40, 'max' => 50],
-        'qa_testing' => ['min' => 15, 'max' => 20],
-        'project_management' => ['min' => 10, 'max' => 15],
-        'devops' => ['min' => 5, 'max' => 5],
+        'analysis' => ['min' => 0, 'max' => 100],
+        'ux_ui' => ['min' => 0, 'max' => 100],
+        'complexity' => ['min' => 0, 'max' => 100],
+        'development' => ['min' => 0, 'max' => 100],
+        'qa_testing' => ['min' => 0, 'max' => 100],
+        'project_management' => ['min' => 0, 'max' => 100],
+        'devops' => ['min' => 0, 'max' => 100],
     ],
     'contingency' => ['min' => 10, 'max' => 25],
 ];

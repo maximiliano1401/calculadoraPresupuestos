@@ -154,6 +154,45 @@
                 font-size: 0.95rem;
             }
 
+            .summary {
+                display: grid;
+                gap: 10px;
+                margin-top: 16px;
+            }
+
+            .summary-item {
+                display: flex;
+                justify-content: space-between;
+                gap: 16px;
+                font-size: 0.95rem;
+                color: var(--muted);
+            }
+
+            .summary-item strong {
+                color: var(--ink);
+            }
+
+            .section-title {
+                font-size: 1rem;
+                margin: 20px 0 10px;
+                color: var(--muted);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+
+            .total-card {
+                margin-top: 18px;
+                padding: 16px;
+                border-radius: 16px;
+                background: linear-gradient(120deg, #ffe6c7, #ffd4b8);
+                color: var(--ink);
+                font-size: 1.1rem;
+                font-weight: 600;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
             .results {
                 display: grid;
                 gap: 12px;
@@ -264,31 +303,31 @@
                         <div class="grid cols-2">
                             <div>
                                 <label for="analysis">Analisis</label>
-                                <input id="analysis" type="number" min="10" max="15" value="12" />
+                                <input id="analysis" type="number" min="0" max="100" value="12" />
                             </div>
                             <div>
                                 <label for="ux_ui">Diseno UX/UI</label>
-                                <input id="ux_ui" type="number" min="10" max="15" value="12" />
+                                <input id="ux_ui" type="number" min="0" max="100" value="12" />
                             </div>
                             <div>
                                 <label for="complexity">Complejidad</label>
-                                <input id="complexity" type="number" min="20" max="30" value="24" />
+                                <input id="complexity" type="number" min="0" max="100" value="24" />
                             </div>
                             <div>
                                 <label for="development">Desarrollo</label>
-                                <input id="development" type="number" min="40" max="50" value="45" />
+                                <input id="development" type="number" min="0" max="100" value="45" />
                             </div>
                             <div>
                                 <label for="qa_testing">QA y Testing</label>
-                                <input id="qa_testing" type="number" min="15" max="20" value="18" />
+                                <input id="qa_testing" type="number" min="0" max="100" value="18" />
                             </div>
                             <div>
                                 <label for="project_management">Gestion de proyecto</label>
-                                <input id="project_management" type="number" min="10" max="15" value="12" />
+                                <input id="project_management" type="number" min="0" max="100" value="12" />
                             </div>
                             <div>
                                 <label for="devops">Despliegue (DevOps)</label>
-                                <input id="devops" type="number" min="5" max="5" value="5" />
+                                <input id="devops" type="number" min="0" max="100" value="5" />
                             </div>
                         </div>
 
@@ -299,19 +338,37 @@
                     </div>
 
                     <div class="panel">
-                        <h2>Analisis</h2>
+                        <h2>Analisis final</h2>
                         <div class="analysis">
-                            <p><strong>Como se calcula:</strong> se obtiene el costo base multiplicando horas totales por tarifa. Luego se suman costos fijos (infraestructura, integraciones y plataforma). Finalmente se aplica la contingencia entre 10% y 25% sobre el total neto.</p>
-                            <p><strong>Normalizacion:</strong> si los porcentajes de rubros no suman 100%, se normalizan proporcionalmente para distribuir el costo base de forma consistente.</p>
+                            <p><strong>Como se calcula:</strong> se obtiene el costo base multiplicando horas totales por tarifa. Luego se suman costos fijos y al final se aplica la contingencia sobre el total neto.</p>
+                            <p id="normalization-note"><strong>Normalizacion:</strong> si los porcentajes de rubros no suman 100%, se normalizan proporcionalmente.</p>
                         </div>
 
                         <div class="results" style="margin-top: 20px;">
                             <div class="pill" id="status">Listo para calcular.</div>
+
+                            <div class="section-title">Resumen de parametros</div>
+                            <div class="summary">
+                                <div class="summary-item">
+                                    <span>Tiempo estimado</span>
+                                    <strong id="summary-time">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Tarifa profesional</span>
+                                    <strong id="summary-rate">-</strong>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Costo base mano de obra</span>
+                                    <strong id="summary-base">-</strong>
+                                </div>
+                            </div>
+
+                            <div class="section-title">Desglose por rubros</div>
                             <div>
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Rubro</th>
+                                            <th>Concepto</th>
                                             <th>Porcentaje</th>
                                             <th>Monto</th>
                                         </tr>
@@ -323,7 +380,30 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="json" id="json-output">{}</div>
+
+                            <div class="section-title">Costos adicionales y fijos</div>
+                            <div>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Descripcion</th>
+                                            <th>Monto</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="extra-costs-table">
+                                        <tr>
+                                            <td colspan="2">Sin datos aun.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="total-card">
+                                <span>Total presupuestado</span>
+                                <span id="summary-total">-</span>
+                            </div>
+
+                            <div class="json" id="json-output" style="margin-top: 18px;">{}</div>
                         </div>
                     </div>
                 </section>
@@ -372,10 +452,26 @@
             const inputs = Object.fromEntries(fields.map((id) => [id, document.getElementById(id)]));
             const statusEl = document.getElementById('status');
             const tableBody = document.getElementById('breakdown-table');
+            const extraCostsBody = document.getElementById('extra-costs-table');
             const jsonOutput = document.getElementById('json-output');
+            const summaryTime = document.getElementById('summary-time');
+            const summaryRate = document.getElementById('summary-rate');
+            const summaryBase = document.getElementById('summary-base');
+            const summaryTotal = document.getElementById('summary-total');
+            const normalizationNote = document.getElementById('normalization-note');
 
             const formatMoney = (value) =>
-                new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'USD' }).format(value);
+                new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value);
+
+            const breakdownLabels = {
+                analysis: 'Analisis',
+                ux_ui: 'Diseno UX/UI',
+                complexity: 'Complejidad',
+                development: 'Desarrollo',
+                qa_testing: 'QA y Testing',
+                project_management: 'Gestion de proyecto',
+                devops: 'Despliegue (DevOps)',
+            };
 
             const payloadFromInputs = () => ({
                 weeks: Number(inputs.weeks.value),
@@ -402,10 +498,32 @@
                 statusEl.textContent = 'Calculo listo. Total bruto: ' + formatMoney(data.totals.gross_cost);
                 statusEl.classList.add('reveal');
 
+                summaryTime.textContent = `${data.input.weeks} semanas (${data.totals.total_hours} horas totales)`;
+                summaryRate.textContent = formatMoney(data.input.hourly_rate) + ' / hora';
+                summaryBase.textContent = formatMoney(data.totals.base_cost);
+                summaryTotal.textContent = formatMoney(data.totals.gross_cost);
+
+                normalizationNote.textContent = `Normalizacion: suma original ${data.input.breakdown_sum_original}% -> normalizada a ${data.input.breakdown_sum_normalized}%.`;
+
                 tableBody.innerHTML = data.breakdown
                     .map(
                         (item) =>
-                            `<tr><td>${item.key}</td><td>${item.percent}%</td><td>${formatMoney(item.amount)}</td></tr>`
+                            `<tr><td>${breakdownLabels[item.key] || item.key}</td><td>${item.percent}%</td><td>${formatMoney(item.amount)}</td></tr>`
+                    )
+                    .join('');
+
+                extraCostsBody.innerHTML = [
+                    {
+                        label: `Contingencia (${data.input.contingency_percent}%)`,
+                        amount: data.totals.contingency_amount,
+                    },
+                    { label: 'Infraestructura', amount: data.input.fixed_costs.infrastructure },
+                    { label: 'Integraciones', amount: data.input.fixed_costs.integrations },
+                    { label: 'Plataforma', amount: data.input.fixed_costs.platform },
+                ]
+                    .map(
+                        (item) =>
+                            `<tr><td>${item.label}</td><td>${formatMoney(item.amount)}</td></tr>`
                     )
                     .join('');
 
@@ -415,6 +533,11 @@
             const renderError = (message) => {
                 statusEl.textContent = message;
                 tableBody.innerHTML = '<tr><td colspan="3">Sin datos disponibles.</td></tr>';
+                extraCostsBody.innerHTML = '<tr><td colspan="2">Sin datos disponibles.</td></tr>';
+                summaryTime.textContent = '-';
+                summaryRate.textContent = '-';
+                summaryBase.textContent = '-';
+                summaryTotal.textContent = '-';
                 jsonOutput.textContent = '{}';
             };
 
@@ -423,13 +546,27 @@
                 try {
                     const response = await fetch('/api/budget/calculate', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                        },
                         body: JSON.stringify(payloadFromInputs()),
                     });
 
                     if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || 'Error al calcular.');
+                        let errorMessage = `Error ${response.status}: ${response.statusText}`;
+                        const contentType = response.headers.get('content-type') || '';
+
+                        if (contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            if (errorData.message) {
+                                errorMessage = errorData.message;
+                            } else if (errorData.errors) {
+                                errorMessage = Object.values(errorData.errors).flat().join(' ');
+                            }
+                        }
+
+                        throw new Error(errorMessage || 'Error al calcular.');
                     }
 
                     const data = await response.json();
